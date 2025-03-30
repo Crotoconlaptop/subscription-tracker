@@ -63,6 +63,21 @@ const Dashboard = ({ session }) => {
       .toFixed(2);
   };
 
+  const handleDelete = async (id) => {
+    const confirm = window.confirm('Are you sure you want to delete this subscription?');
+    if (!confirm) return;
+  
+    const { error } = await supabase
+      .from('subscriptions')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+  
+    if (!error) {
+      fetchSubscriptions();
+    }
+  };
+  
   return (
     <div className="container">
   <div className="header">
@@ -78,12 +93,16 @@ const Dashboard = ({ session }) => {
     <div style={{ marginTop: '20px' }}>
       <h3>Total Monthly: ${getMonthlyTotal()}</h3>
       <ul>
-        {subscriptions.map(sub => (
-          <li key={sub.id}>
-            {sub.name} – ${sub.price} – {sub.billing_cycle} – Due: {sub.due_date}
-          </li>
-        ))}
-      </ul>
+  {subscriptions.map(sub => (
+    <li key={sub.id}>
+      {sub.name} – ${sub.price} – {sub.billing_cycle} – Due: {sub.due_date}
+      <button style={{ marginLeft: '10px' }} onClick={() => handleDelete(sub.id)}>
+        Delete
+      </button>
+    </li>
+  ))}
+</ul>
+
     </div>
   )}
 </div>
