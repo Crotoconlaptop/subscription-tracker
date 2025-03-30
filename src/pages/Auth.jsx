@@ -15,6 +15,8 @@ const Auth = ({ onAuth }) => {
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password });
 
+      console.log('signup result:', { data, error });
+
     if (error) {
       setError(error.message);
     } else {
