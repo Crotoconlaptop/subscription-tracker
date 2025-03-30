@@ -23,6 +23,20 @@ const Auth = ({ onAuth }) => {
       onAuth(data);
     }
   };
+  const handleResendConfirmation = async () => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
+  
+    if (error) {
+      console.error('Resend error:', error);
+      setError('Error resending email: ' + error.message);
+    } else {
+      alert('Confirmation email sent! Please check your inbox 📬');
+    }
+  };
+  
 
   return (
     <div>
@@ -32,6 +46,17 @@ const Auth = ({ onAuth }) => {
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
+      {!isLogin && (
+  <button
+    type="button"
+    onClick={handleResendConfirmation}
+    disabled={!email}
+    style={{ marginTop: '10px' }}
+  >
+    Resend confirmation email
+  </button>
+)}
+
       <p>
         {isLogin ? 'No account?' : 'Already have an account?'}{' '}
         <button onClick={() => setIsLogin(!isLogin)}>
