@@ -3,6 +3,8 @@ import { supabase } from '../services/supabaseClient';
 import '../styles/global.css';
 import '../styles/layout.css';
 import '../styles/form.css';
+import '../styles/card.css';
+
 
 
 const Dashboard = ({ session }) => {
@@ -86,22 +88,62 @@ const Dashboard = ({ session }) => {
   </div>
 
   <form onSubmit={handleAdd}>
-    ...
-  </form>
+  <input
+    type="text"
+    name="name"
+    value={form.name}
+    onChange={handleInputChange}
+    placeholder="Service Name"
+    required
+  />
+  <input
+    type="number"
+    name="price"
+    value={form.price}
+    onChange={handleInputChange}
+    placeholder="Price (USD)"
+    min="0"
+    step="0.01"
+    required
+  />
+  <select
+    name="billing_cycle"
+    value={form.billing_cycle}
+    onChange={handleInputChange}
+    required
+  >
+    <option value="monthly">Monthly</option>
+    <option value="yearly">Yearly</option>
+  </select>
+  <input
+    type="date"
+    name="due_date"
+    value={form.due_date}
+    onChange={handleInputChange}
+    required
+  />
+  <button type="submit">Add Subscription</button>
+</form>
+
 
   {!loading && (
     <div style={{ marginTop: '20px' }}>
       <h3>Total Monthly: ${getMonthlyTotal()}</h3>
-      <ul>
+      <div className="card-list">
   {subscriptions.map(sub => (
-    <li key={sub.id}>
-      {sub.name} – ${sub.price} – {sub.billing_cycle} – Due: {sub.due_date}
-      <button style={{ marginLeft: '10px' }} onClick={() => handleDelete(sub.id)}>
-        Delete
-      </button>
-    </li>
+    <div className="card" key={sub.id}>
+      <h4>{sub.name}</h4>
+      <p><strong>Price:</strong> ${sub.price}</p>
+      <p><strong>Cycle:</strong> {sub.billing_cycle}</p>
+      <p><strong>Due:</strong> {sub.due_date}</p>
+      <div className="actions">
+        <button onClick={() => handleDelete(sub.id)}>Delete</button>
+      </div>
+    </div>
   ))}
-</ul>
+</div>
+
+
 
     </div>
   )}
