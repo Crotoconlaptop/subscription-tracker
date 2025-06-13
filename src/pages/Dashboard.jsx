@@ -63,8 +63,8 @@ const Dashboard = ({ session }) => {
   };
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm('Are you sure you want to delete this subscription?');
-    if (!confirm) return;
+    const userConfirmed = window.confirm('Are you sure you want to delete this subscription?');
+    if (!userConfirmed) return;
 
     const { error } = await supabase
       .from('subscriptions')
